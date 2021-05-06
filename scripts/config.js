@@ -1,5 +1,8 @@
 module.exports = {
-  name: 'MyLibrary',
+  name: 'Dropdown-menu',
   outputName: 'index',
-  external: [],
+  external: [
+    '@fapalz/utils/src/utils/transition',
+    '@fapalz/utils/src/utils/index',
+  ],
 }
