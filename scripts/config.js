@@ -1,5 +1,5 @@
 module.exports = {
-  name: 'Dropdown-menu',
+  name: 'DropdownMenu',
   outputName: 'index',
   external: [
     '@fapalz/utils/src/utils/transition',
