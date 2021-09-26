@@ -9,6 +9,8 @@ const NavigationMenu = (options) => {
     dropDownMenu: '.dropdown-menu',
     container: '.dropdown-container',
     toRightClass: 'toright',
+    delayOver: 100,
+    delayOut: 250,
   }
 
   const settings = Object.assign(DEFAULTS, options)
@@ -25,9 +27,9 @@ const NavigationMenu = (options) => {
   function getDropdown(dropdown) {
     if (!dropdown) return null
 
-    const id = !dropdown.dataset.menuIndex
-      ? (dropdown.dataset.menuIndex = state.idCnt++)
-      : dropdown.dataset.menuIndex
+    const id = !dropdown.dataset.dropdownMenuIndex
+      ? (dropdown.dataset.dropdownMenuIndex = state.idCnt++)
+      : dropdown.dataset.dropdownMenuIndex
 
     if (!state.dropdowns[id]) state.dropdowns[id] = new DropdownMenu(dropdown)
 
@@ -41,8 +43,7 @@ const NavigationMenu = (options) => {
   function cleardropdownStyle(el) {
     el.style.left = null
     el.style.right = null
-
-    el.classList.remove('toright')
+    el.classList.remove(settings.toRightClass)
   }
 
   function setPopupAlign(dropdown) {
@@ -100,9 +101,9 @@ const NavigationMenu = (options) => {
   function getItem(item) {
     if (!item) return null
 
-    const id = !item.dataset.menuIndex
-      ? (item.dataset.menuIndex = state.idCnt++)
-      : item.dataset.menuIndex
+    const id = !item.dataset.dropdownItemIndex
+      ? (item.dataset.dropdownItemIndex = state.idCnt++)
+      : item.dataset.dropdownItemIndex
 
     if (!state.items[id])
       state.items[id] = new MenuItem(item, {
@@ -112,6 +113,8 @@ const NavigationMenu = (options) => {
         out: () => {
           dropdownHide(item)
         },
+        delayOver: settings.delayOver,
+        delayOut: settings.delayOut,
       })
 
     return state.items[id]
@@ -134,7 +137,7 @@ const NavigationMenu = (options) => {
   }
 
   const items = Array.prototype.slice.call(
-    document.querySelectorAll('.page-navigation__item.dropdown')
+    document.querySelectorAll(settings.dropDown)
   )
   items.forEach((element) => {
     element.addEventListener('mouseenter', function () {

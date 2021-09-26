@@ -10,6 +10,8 @@ export default class MenuItem {
     const settings = {
       out: () => {},
       over: () => {},
+      delayOver: 100,
+      delayOut: 250,
     }
 
     return Object.assign(settings, options)
@@ -26,7 +28,7 @@ export default class MenuItem {
       if (this.opening) {
         this.options.over(this.element)
       }
-    }, 100)
+    }, this.options.delayOver)
   }
 
   itemOut() {
@@ -40,6 +42,6 @@ export default class MenuItem {
       if (!this.opening) {
         this.options.out(this.element)
       }
-    }, 250)
+    }, this.options.delayOut)
   }
 }

@@ -1,5 +1,5 @@
 /**
- * Dropdown-menu  1.0.0
+ * DropdownMenu  1.0.0
  * GitHub template for starting new projects
  * https://github.com/Fapalz/dropdown-menu#readme
  *
@@ -7,7 +7,7 @@
  *
  * Released under the MIT License
  *
- * Released on: May 6, 2021
+ * Released on: September 26, 2021
  */
 
 'use strict';
@@ -29,7 +29,9 @@ var MenuItem = /*#__PURE__*/function () {
   MenuItem.mergeSettings = function mergeSettings(options) {
     var settings = {
       out: function out() {},
-      over: function over() {}
+      over: function over() {},
+      delayOver: 100,
+      delayOut: 250
     };
     return Object.assign(settings, options);
   };
@@ -48,7 +50,7 @@ var MenuItem = /*#__PURE__*/function () {
       if (_this.opening) {
         _this.options.over(_this.element);
       }
-    }, 100);
+    }, this.options.delayOver);
   };
 
   _proto.itemOut = function itemOut() {
@@ -63,7 +65,7 @@ var MenuItem = /*#__PURE__*/function () {
       if (!_this2.opening) {
         _this2.options.out(_this2.element);
       }
-    }, 250);
+    }, this.options.delayOut);
   };
 
   return MenuItem;
@@ -109,7 +111,9 @@ var NavigationMenu = function NavigationMenu(options) {
     dropDown: '.dropdown',
     dropDownMenu: '.dropdown-menu',
     container: '.dropdown-container',
-    toRightClass: 'toright'
+    toRightClass: 'toright',
+    delayOver: 100,
+    delayOut: 250
   };
   var settings = Object.assign(DEFAULTS, options);
   var state = {
@@ -123,7 +127,7 @@ var NavigationMenu = function NavigationMenu(options) {
 
   function getDropdown(dropdown) {
     if (!dropdown) return null;
-    var id = !dropdown.dataset.menuIndex ? dropdown.dataset.menuIndex = state.idCnt++ : dropdown.dataset.menuIndex;
+    var id = !dropdown.dataset.dropdownMenuIndex ? dropdown.dataset.dropdownMenuIndex = state.idCnt++ : dropdown.dataset.dropdownMenuIndex;
     if (!state.dropdowns[id]) state.dropdowns[id] = new DropdownMenu(dropdown);
     return state.dropdowns[id];
   }
@@ -135,7 +139,7 @@ var NavigationMenu = function NavigationMenu(options) {
   function cleardropdownStyle(el) {
     el.style.left = null;
     el.style.right = null;
-    el.classList.remove('toright');
+    el.classList.remove(settings.toRightClass);
   }
 
   function setPopupAlign(dropdown) {
@@ -143,10 +147,8 @@ var NavigationMenu = function NavigationMenu(options) {
     var container = document.querySelector(settings.container);
     cleardropdownStyle(dropdown);
     var isHasParentdropdownMenu = !!dropdown.parentElement.closest(settings.dropDownMenu);
-    var isToRight = !!dropdown.parentElement.closest(settings.dropDownMenu + "." + settings.toRightClass); //console.log(dropdown.getBoundingClientRect())
-
+    var isToRight = !!dropdown.parentElement.closest(settings.dropDownMenu + "." + settings.toRightClass);
     var dropdownRightEdge = dropdown.getBoundingClientRect().left + dropdown.offsetWidth;
-    console.log(container);
     var containerRightEdge = container.getBoundingClientRect().left + container.offsetWidth;
 
     if (dropdownRightEdge > containerRightEdge || isToRight) {
@@ -189,14 +191,16 @@ var NavigationMenu = function NavigationMenu(options) {
 
   function getItem(item) {
     if (!item) return null;
-    var id = !item.dataset.menuIndex ? item.dataset.menuIndex = state.idCnt++ : item.dataset.menuIndex;
+    var id = !item.dataset.dropdownItemIndex ? item.dataset.dropdownItemIndex = state.idCnt++ : item.dataset.dropdownItemIndex;
     if (!state.items[id]) state.items[id] = new MenuItem(item, {
       over: function over() {
         dropdownShow(item);
       },
       out: function out() {
         dropdownHide(item);
-      }
+      },
+      delayOver: settings.delayOver,
+      delayOut: settings.delayOut
     });
     return state.items[id];
   }
@@ -215,7 +219,7 @@ var NavigationMenu = function NavigationMenu(options) {
     menuItem.itemOut();
   }
 
-  var items = Array.prototype.slice.call(document.querySelectorAll('.page-navigation__item.dropdown'));
+  var items = Array.prototype.slice.call(document.querySelectorAll(settings.dropDown));
   items.forEach(function (element) {
     element.addEventListener('mouseenter', function () {
       itemOver(this);
