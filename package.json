@@ -1,5 +1,5 @@
 {
-  "name": "dropdown-menu",
+  "name": "@fapalz/dropdown-menu",
   "version": "1.0.0",
   "description": "GitHub template for starting new projects",
   "main": "./package/index.js",
